@@ -36,11 +36,18 @@ export default function Contact() {
   return (
     <section id="contact" className="relative px-6 py-28 md:py-36">
       <div className="mx-auto max-w-6xl">
+        {/*
+          文言の注意:
+          「制作の依頼を受け付けます」のように有償の仕事を募る表現は入れないでください。
+          Vercel の無料プラン（Hobby）は非商用の個人利用に限定されており、
+          「サービスの宣伝」と解釈される表現は規約に触れる可能性があるためです。
+          有償の依頼を受けるようになったら、Pro プラン（$20/月）へ切り替えが必要です。
+        */}
         <SectionHeading
           index="04"
           eyebrow="Contact"
           title="お話しできることを楽しみにしています。"
-          description="制作の依頼、採用のご相談、技術的な質問など、GitHub 経由でお気軽にどうぞ。"
+          description="採用のご相談、技術的な質問など、GitHub 経由でお気軽にどうぞ。"
         />
 
         <Reveal>
