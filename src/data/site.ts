@@ -19,8 +19,8 @@ export const site = {
   location: "Japan",
   // 連絡先はメールアドレスを公開せず、GitHub に集約しています。
   // 生のアドレスを公開ページに置くと、収集ロボットに拾われて迷惑メールの標的になるためです。
-  github: "https://github.com/rutar999",
-  githubHandle: "@rutar999",
+  github: "https://github.com/Rutar999",
+  githubHandle: "@Rutar999",
 } as const;
 
 /** ヘッダーのナビゲーション。href はページ内アンカー */
@@ -146,7 +146,7 @@ export const works: Work[] = [
       "/works/appshelf/05_detail.png",
       "/works/appshelf/06_multiselect.png",
     ],
-    links: [{ label: "GitHub", href: "https://github.com/rutar999" }],
+    links: [{ label: "GitHub", href: "https://github.com/Rutar999" }],
     featured: true,
   },
   {
@@ -164,7 +164,9 @@ export const works: Work[] = [
     tags: ["Next.js 16", "TypeScript", "Tailwind v4", "Motion", "Canvas"],
     year: "2026",
     image: null,
-    links: [{ label: "GitHub", href: "https://github.com/rutar999" }],
+    links: [
+      { label: "ソースコード", href: "https://github.com/Rutar999/portfolio" },
+    ],
   },
   {
     slug: "next",
