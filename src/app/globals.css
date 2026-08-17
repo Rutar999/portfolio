@@ -1,26 +1,179 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ===========================================================================
+   デザイントークン
+   Tailwind CSS v4 では、CSS の @theme ブロックに変数を書くと
+   それがそのまま Tailwind のユーティリティクラスになります。
+   例: --color-accent を定義 → text-accent / bg-accent が使えるようになる
+   （v3 までの tailwind.config.js は不要になりました）
+   =========================================================================== */
+@theme {
+  /* 背景・面 */
+  --color-ink: #05060a;
+  --color-ink-soft: #0a0c14;
+  --color-line: rgba(255, 255, 255, 0.08);
+
+  /* 文字 */
+  --color-fg: #e9ecf5;
+  --color-muted: #878ea6;
+
+  /* アクセント（3色のグラデーションで全体を統一） */
+  --color-accent: #6ee7f9;
+  --color-accent-2: #a78bfa;
+  --color-accent-3: #f472b6;
+
+  /* フォント（layout.tsx の next/font から変数が流し込まれます） */
+  --font-sans: var(--font-inter), var(--font-noto), system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, monospace;
+
+  /* アニメーション */
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 8s ease-in-out infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ===========================================================================
+   ベーススタイル
+   =========================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* ヘッダーが固定なので、アンカー移動時に見出しが隠れないよう余白を確保 */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    /* 日本語は字面が詰まって見えるので、少しだけ字間を開ける */
+    letter-spacing: 0.01em;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-accent-2) 40%, transparent);
+    color: #fff;
+  }
+
+  /* キーボード操作時だけフォーカスリングを出す（アクセシビリティ対応） */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 99px;
+    border: 3px solid var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.24);
+  }
+}
+
+/* ===========================================================================
+   自作ユーティリティ
+   Tailwind v4 の @utility で独自クラスを追加できます
+   =========================================================================== */
+
+/* グラデーション文字 */
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-accent) 0%,
+    var(--color-accent-2) 45%,
+    var(--color-accent-3) 100%
+  );
+  background-clip: text;
+  color: transparent;
+}
+
+/* すりガラス風のカード面 */
+@utility glass {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.015)
+  );
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--color-line);
+}
+
+/* 読み上げソフト専用テキスト（画面には出さないがスクリーンリーダーには読ませる） */
+@utility sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+
+  &:focus {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: auto;
+    height: auto;
+    padding: 0.75rem 1.25rem;
+    clip-path: none;
+    background: var(--color-ink-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: 0.5rem;
+    z-index: 100;
+  }
+}
+
+/* ===========================================================================
+   「視差エフェクトを減らす」OS 設定を尊重する
+   目が回りやすい方や乗り物酔いしやすい方への配慮（WCAG 2.3.3）
+   =========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
