@@ -14,8 +14,11 @@ export const site = {
   tagline: "つくるのは、判断できる材料。",
   description:
     "Kotlin と TypeScript で、ローカル完結・オフライン前提のアプリをつくっています。使う人が自分で判断できる形まで情報を整えることを大切にしています。",
-  // ▼ デプロイ後に実際の URL に書き換えてください（OGP 画像の絶対 URL 生成に使います）
-  url: "https://example.vercel.app",
+  // Vercel が発行した公開 URL。
+  // OGP 画像（SNS シェア時のサムネイル）は絶対 URL で指定する必要があるため、
+  // ここが実際の URL になっていないとサムネイルが表示されません。
+  // 独自ドメインを設定したら、この値もそちらに変更してください。
+  url: "https://portfolio-neon-sigma-31.vercel.app",
   location: "Japan",
   // 連絡先はメールアドレスを公開せず、GitHub に集約しています。
   // 生のアドレスを公開ページに置くと、収集ロボットに拾われて迷惑メールの標的になるためです。
